@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <p>Welcome {{user.name}}</p>
+    <p><a href="/logout">Logout</a></p>
+
+    <h4>Quotable Quotes</h4>
+    <ul>
+
+    {%for x in quote%}
+    <li>
+    <p>{{x.qname}}: {{x.message}}</p>
+
+    <p>postedby :<a href="/view/{{x.postee.id}}">{{x.postee.name}}</a></p>
+    <p><a href="/fav/{{x.id}}/{{user.id}}">Add to My List</a></p>
+    </li>
+    {%endfor%}
+    </ul>
+    <h4>Your Favourites</h4>
+    <ul>
+    {%for y in fav%}
+    <li>
+    <p>{{y.quote.qname}}: {{y.quote.message}}</p>
+
+    <p>postedby :<a href="/view/{{y.quote.postee.id}}">{{y.quote.postee.name}}</a></p>
+    <p><a href="/remove/{{y.quote_id}}/{{y.user_id}}">Remove from My List</a></p>
+    </li>
+    {%endfor%}
+    </ul>
+
+
+
+    <h4>Contribute a Quote</h4>
+    {%for error in errors%}
+    <p>{{error}}</p>
+    {%endfor%}
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ ERRORS }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+<form action="/addquote/{{user.id}}" method="post">
+  {%csrf_token%}
+
+  <p>Quoted By: <input type="text" name="qname"></p>
+  <p>Message: <textarea name="message" rows="8" cols="80"></textarea>
+    </p>
+  <input type="submit" value="submit">
+</form>
+
+  </body>
+</html>
